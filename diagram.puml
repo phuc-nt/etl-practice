@@ -1,0 +1,37 @@
+@startuml
+!define RECTANGLE class
+
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+RECTANGLE MySQL {
+    :Data Source;
+    :employees;
+}
+
+RECTANGLE Spark {
+    :Extract Data;
+    :Transform Data;
+    :age calculations;
+    :salary categorization;
+}
+
+RECTANGLE HDFS {
+    :Staging Data;
+    :transformed_employees.parquet;
+}
+
+RECTANGLE Hive {
+    :Load Data;
+    :hive_employees;
+    :SQL-like Queries;
+}
+
+MySQL -down-> Spark : Extract
+Spark -down-> HDFS : Transform
+HDFS -down-> Hive : Load
+
+@enduml
