@@ -1,95 +1,59 @@
-# Toàn cảnh Quy trình ETL sử dụng Hadoop, Spark và Hive
+## Hiểu về ETL và ELT: Chiến lược tích hợp dữ liệu với ví dụ về dữ liệu nhân viên
 
-## 1. Extract (Trích xuất dữ liệu)
+Trong thế giới tích hợp dữ liệu, ETL (Extract, Transform, Load) và ELT (Extract, Load, Transform) là hai phương pháp phổ biến được sử dụng để xử lý dữ liệu từ nhiều nguồn khác nhau. Cả hai đều có quy trình và ứng dụng riêng biệt. Bài viết này sẽ đi sâu vào sự khác biệt giữa ETL và ELT, cung cấp ví dụ về mỗi phương pháp sử dụng dữ liệu nhân viên, và trình bày các bước liên quan trong mỗi quy trình.
 
-Trong bước này, dữ liệu được trích xuất từ **Data Source** (MySQL) và lưu trữ vào **Data Lake** (HDFS).
+### 1. So sánh ETL và ELT
 
-- **Kết nối MySQL và Trích xuất Dữ liệu**: Sử dụng PySpark để kết nối tới cơ sở dữ liệu MySQL và trích xuất bảng `employees`. Dữ liệu sau đó được lưu trữ dưới dạng file Parquet trong HDFS.
+**ETL (Extract, Transform, Load)**:
 
-## 2. Transform (Biến đổi dữ liệu)
+![ETL](img/ETL.png)
 
-Sau khi dữ liệu được trích xuất và lưu trữ, nó sẽ được biến đổi để phù hợp với các yêu cầu phân tích và lưu trữ.
+- **Extract**: Dữ liệu được trích xuất từ nhiều nguồn như cơ sở dữ liệu, hệ thống CRM, sự kiện web, v.v.
+- **Transform**: Dữ liệu sau đó được biến đổi thành định dạng phù hợp cho phân tích. Bước này bao gồm làm sạch, lọc và áp dụng các quy tắc kinh doanh.
+- **Load**: Cuối cùng, dữ liệu đã được biến đổi được tải vào Kho dữ liệu (Data Warehouse), sẵn sàng cho phân tích.
 
-- **Biến đổi Dữ liệu**: Thực hiện các phép biến đổi trên DataFrame như thêm cột mới (ví dụ: cột `age` dựa trên năm sinh), lọc dữ liệu (ví dụ: chỉ giữ lại các nhân viên đã kết hôn).
-- **Lưu Dữ liệu Biến đổi**: Sau khi biến đổi, dữ liệu được lưu trữ lại vào HDFS dưới dạng file ORC. 
+**ELT (Extract, Load, Transform)**:
 
-## 3. Load (Tải dữ liệu)
+![ELT](img/ELT.png)
 
-Bước cuối cùng là tải dữ liệu vào **Data Warehouse** (Hive) để phân tích và truy vấn.
+- **Extract**: Dữ liệu được trích xuất từ nhiều nguồn như ETL.
+- **Load**: Dữ liệu thô sau đó được tải trực tiếp vào Data Lake hoặc Data Warehouse.
+- **Transform**: Quá trình biến đổi diễn ra trong Data Lake hoặc Data Warehouse, nơi dữ liệu được làm sạch, lọc và chuẩn bị cho phân tích.
 
-- **Tạo Bảng Hive**: Tạo bảng Hive liên kết với dữ liệu đã lưu trữ trong HDFS. Bảng này sẽ được sử dụng để thực hiện các truy vấn phân tích dữ liệu.
-- **Phân tích Dữ liệu với Hive**: Sử dụng Hive để thực hiện các truy vấn SQL trên dữ liệu đã biến đổi.
+### 2. Chi tiết ETL với ví dụ về dữ liệu nhân viên
 
-### Tích hợp BI Tool
+Trong ví dụ này, chúng ta sẽ sử dụng Hadoop và Spark để thực hiện quá trình ETL với dữ liệu nhân viên từ MySQL.
 
-Để trực quan hóa dữ liệu, bạn có thể tích hợp một công cụ BI (Business Intelligence) như Apache Superset, Tableau, Power BI, hoặc bất kỳ công cụ BI nào khác hỗ trợ kết nối với Hive.
+#### Bước 1: Trích xuất Dữ liệu từ MySQL
 
-## Tổng kết các bước thực hiện:
+Dữ liệu nhân viên được trích xuất từ cơ sở dữ liệu MySQL.
 
-### Bước 1: Trích xuất Dữ liệu từ MySQL vào HDFS thông qua Spark
+#### Bước 2: Biến đổi Dữ liệu với Spark
 
-1. **Kết nối đến MySQL**: Sử dụng JDBC để kết nối đến cơ sở dữ liệu MySQL.
-2. **Trích xuất Dữ liệu**: Trích xuất bảng `employees` từ MySQL.
-3. **Lưu Trữ vào HDFS**: Lưu dữ liệu trích xuất vào HDFS dưới dạng file Parquet.
+Dữ liệu được biến đổi để tính toán các thông tin như tuổi và thời gian làm việc (seniority) của nhân viên. Bước này bao gồm việc làm sạch, lọc và chuẩn bị dữ liệu theo định dạng phù hợp cho phân tích.
 
-### Bước 2: Biến đổi Dữ liệu với Spark và Lưu trữ trở lại HDFS
+#### Bước 3: Tải Dữ liệu đã Biến đổi vào HDFS
 
-1. **Đọc Dữ liệu từ HDFS**: Đọc dữ liệu đã lưu trữ trong HDFS.
-2. **Biến đổi Dữ liệu**: Thực hiện các phép biến đổi như thêm cột `age`, lọc nhân viên đã kết hôn.
-3. **Lưu Dữ liệu đã Biến đổi vào HDFS**: Lưu dữ liệu đã biến đổi trở lại HDFS dưới dạng file ORC để tối ưu hóa hiệu suất truy vấn trong Hive.
+Dữ liệu sau khi biến đổi được lưu trữ vào HDFS dưới định dạng ORC để dễ dàng xử lý bởi Hive. Cuối cùng, dữ liệu đã được tải vào Kho dữ liệu (Data Warehouse), sẵn sàng cho phân tích.
 
-### Bước 3: Sử dụng Hive để Quản lý và Phân tích Dữ liệu
+### 3. Chi tiết ELT với ví dụ về dữ liệu nhân viên
 
-1. **Tạo Bảng Hive từ Dữ liệu HDFS**: Tạo bảng Hive liên kết với dữ liệu đã biến đổi trong HDFS. Đây là bước đưa dữ liệu vào **Data Warehouse**.
-2. **Phân tích và Truy vấn Dữ liệu**: Sử dụng Hive để thực hiện các truy vấn phân tích dữ liệu.
+Trong ví dụ này, chúng ta sẽ sử dụng Hadoop, Spark, và Hive để thực hiện quá trình ELT với dữ liệu nhân viên từ MySQL.
 
-## Kết luận
+#### Bước 1: Trích xuất Dữ liệu từ MySQL
 
-Bằng cách sử dụng Hadoop, Spark và Hive, bạn có thể xây dựng một hệ thống ETL mạnh mẽ và linh hoạt. Quy trình này không chỉ giúp trích xuất và biến đổi dữ liệu từ **Data Source** (MySQL) một cách hiệu quả mà còn cho phép bạn lưu trữ và phân tích dữ liệu lớn trong **Data Lake** (HDFS) và **Data Warehouse** (Hive) một cách dễ dàng. Các công cụ BI có thể được sử dụng để trực quan hóa dữ liệu, tạo ra các bảng điều khiển đẹp mắt và cung cấp những cái nhìn sâu sắc về dữ liệu.
+Dữ liệu nhân viên được trích xuất từ cơ sở dữ liệu MySQL và lưu trữ vào HDFS dưới dạng thô.
 
-Đúng vậy, ELT (Extract, Load, Transform) là một quy trình xử lý dữ liệu mà trong đó dữ liệu được trích xuất (Extract) từ nguồn, sau đó được tải (Load) trực tiếp vào Data Warehouse mà không qua trung gian như Data Lake. Sau khi dữ liệu đã được nạp vào Data Warehouse, các phép biến đổi (Transform) sẽ được thực hiện trực tiếp trên đó để chuẩn bị cho các phân tích và truy vấn.
+#### Bước 2: Tải Dữ liệu Thô vào HDFS
 
-# Toàn cảnh Quy trình ELT
+Dữ liệu thô được tải trực tiếp vào HDFS, một thành phần của Data Lake.
 
-## 1. Extract (Trích xuất dữ liệu)
+#### Bước 3: Biến đổi Dữ liệu trong Hive
 
-Trong bước này, dữ liệu được trích xuất từ **Data Source** (MySQL).
+Dữ liệu được biến đổi trong Hive để tính toán các thông tin như tuổi và thời gian làm việc (seniority) của nhân viên. Sau đó, dữ liệu đã biến đổi được lưu trữ lại trong HDFS, phục vụ cho phân tích và truy vấn nhanh trong Data Lake hoặc Data Warehouse.
 
-- **Kết nối MySQL và Trích xuất Dữ liệu**: Sử dụng công cụ ETL để kết nối tới cơ sở dữ liệu MySQL và trích xuất bảng `employees`.
+### Kết luận
 
-## 2. Load (Tải dữ liệu)
+Việc lựa chọn giữa ETL và ELT phụ thuộc vào nhu cầu cụ thể của doanh nghiệp và hệ thống dữ liệu hiện tại. ETL thường được sử dụng khi cần biến đổi dữ liệu trước khi tải vào kho dữ liệu, trong khi ELT phù hợp khi cần tải dữ liệu thô vào Data Lake hoặc Data Warehouse trước khi biến đổi. Hy vọng rằng bài viết này đã giúp bạn hiểu rõ hơn về hai phương pháp này và cách chúng có thể được áp dụng vào dữ liệu nhân viên.
 
-Dữ liệu trích xuất được tải trực tiếp vào **Data Warehouse**.
-
-- **Tải Dữ liệu vào Data Warehouse**: Dữ liệu được tải trực tiếp vào Data Warehouse (ví dụ: Hive) mà không qua bước trung gian như Data Lake. 
-
-## 3. Transform (Biến đổi dữ liệu)
-
-Sau khi dữ liệu đã được tải vào Data Warehouse, các phép biến đổi được thực hiện trên dữ liệu trong Data Warehouse để chuẩn bị cho các phân tích và truy vấn.
-
-- **Biến đổi Dữ liệu trong Data Warehouse**: Thực hiện các phép biến đổi như thêm cột, tính toán, lọc dữ liệu... trực tiếp trên dữ liệu đã được tải vào Data Warehouse.
-
-
-# So sánh ETL và ELT
-
-## ETL (Extract, Transform, Load)
-
-1. **Extract**: Trích xuất dữ liệu từ nguồn.
-2. **Transform**: Biến đổi dữ liệu trong một hệ thống trung gian (như Spark, Hadoop).
-3. **Load**: Tải dữ liệu đã biến đổi vào Data Warehouse.
-
-- **Ưu điểm**: Dữ liệu được làm sạch và biến đổi trước khi nạp vào Data Warehouse, giúp tối ưu hóa không gian lưu trữ và hiệu suất truy vấn.
-- **Nhược điểm**: Quy trình có thể phức tạp và tốn nhiều tài nguyên do cần có hệ thống trung gian để biến đổi dữ liệu.
-
-## ELT (Extract, Load, Transform)
-
-1. **Extract**: Trích xuất dữ liệu từ nguồn.
-2. **Load**: Tải dữ liệu trực tiếp vào Data Warehouse.
-3. **Transform**: Biến đổi dữ liệu trực tiếp trong Data Warehouse.
-
-- **Ưu điểm**: Quy trình đơn giản hơn do không cần hệ thống trung gian để biến đổi dữ liệu. Tận dụng được sức mạnh tính toán của Data Warehouse để thực hiện các phép biến đổi.
-- **Nhược điểm**: Có thể yêu cầu Data Warehouse mạnh mẽ để xử lý các phép biến đổi phức tạp và khối lượng dữ liệu lớn.
-
-## Kết luận
-
-Tùy thuộc vào nhu cầu và khả năng của hệ thống, bạn có thể chọn giữa ETL và ELT. ETL phù hợp khi bạn cần làm sạch và biến đổi dữ liệu trước khi nạp vào Data Warehouse, trong khi ELT đơn giản hóa quy trình bằng cách tải dữ liệu trực tiếp và thực hiện biến đổi sau trong Data Warehouse.
+Chúc bạn thành công trong việc triển khai các giải pháp tích hợp dữ liệu!
