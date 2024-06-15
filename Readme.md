@@ -1,7 +1,7 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Hiểu về ETL và ELT: Chiến lược tích hợp dữ liệu với ví dụ về dữ liệu nhân viên](#hiểu-về-etl-và-elt-chiến-lược-tích-hợp-dữ-liệu-với-ví-dụ-về-dữ-liệu-nhân-viên)
+- [Hiểu về ETL và ELT: Chiến lược tối ưu sử dụng dữ liệu của doanh nghiệp với Big Data](#hiểu-về-etl-và-elt-chiến-lược-tối-ưu-sử-dụng-dữ-liệu-của-doanh-nghiệp-với-big-data)
   - [1. So sánh ETL và ELT](#1-so-sánh-etl-và-elt)
   - [2. ETL với ví dụ về dữ liệu nhân viên](#2-etl-với-ví-dụ-về-dữ-liệu-nhân-viên)
     - [Bước 1: Trích xuất Dữ liệu từ MySQL](#bước-1-trích-xuất-dữ-liệu-từ-mysql)
@@ -21,8 +21,9 @@
     - [Bước 2: Tải Dữ liệu Thô vào HDFS](#bước-2-tải-dữ-liệu-thô-vào-hdfs-2)
     - [Bước 3: Biến đổi Dữ liệu trong Spark](#bước-3-biến-đổi-dữ-liệu-trong-spark-1)
     - [Bước 4: Kết nối với Công cụ BI và Tạo Dashboard](#bước-4-kết-nối-với-công-cụ-bi-và-tạo-dashboard-1)
+  - [Kết luận](#kết-luận)
 
-## Hiểu về ETL và ELT: Chiến lược tích hợp dữ liệu với ví dụ về dữ liệu nhân viên
+## Hiểu về ETL và ELT: Chiến lược tối ưu sử dụng dữ liệu của doanh nghiệp với Big Data
 
 Trong thế giới tích hợp dữ liệu, ETL (Extract, Transform, Load) và ELT (Extract, Load, Transform) là hai phương pháp phổ biến được sử dụng để xử lý dữ liệu từ nhiều nguồn khác nhau. Cả hai đều có quy trình và ứng dụng riêng biệt. Bài viết này sẽ đi sâu vào sự khác biệt giữa ETL và ELT, cung cấp ví dụ về mỗi phương pháp sử dụng dữ liệu nhân viên, và trình bày các bước liên quan trong mỗi quy trình.
 
@@ -313,3 +314,10 @@ Dữ liệu được biến đổi trong bước trước sẽ được kết n�
 
 - **Bảng Điều Khiển 5**: Productivity của từng cá nhân (PIC)
   - Biểu đồ cột hoặc biểu đồ thanh hiển thị năng suất của từng cá nhân, so sánh giữa estimated effort và actual effort.
+
+### Kết luận
+
+- **Tập trung dữ liệu từ nhiều nguồn**: ELT cho phép tập trung dữ liệu từ nhiều nguồn và nhiều định dạng về một nơi, như Data Lake hoặc Data Warehouse.
+- **Thuận tiện trong lưu trữ và phân tích**: Dữ liệu thô được lưu trữ và có thể được biến đổi theo nhu cầu, giúp việc lưu trữ và phân tích dễ dàng hơn.
+- **Kết hợp phân tích từ nhiều nguồn**: Việc tích hợp dữ liệu từ nhiều nguồn khác nhau giúp tìm ra các insight mới, nâng cao chất lượng phân tích và hỗ trợ ra quyết định chính xác hơn.
+- **Hiệu quả quản lý dữ liệu**: ELT giúp doanh nghiệp có cái nhìn toàn diện và dễ dàng thực hiện các phân tích phức tạp, cải thiện hiệu quả quản lý và ra quyết định dựa trên dữ liệu.
